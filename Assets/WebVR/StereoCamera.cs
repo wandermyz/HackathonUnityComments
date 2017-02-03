@@ -2,9 +2,11 @@
 using System.Collections;
 using System;
 
-public class StereoCamera : MonoBehaviour {
-
+public class StereoCamera : MonoBehaviour
+{
+    GameObject camera;
     Camera cameraMain, cameraL, cameraR;
+    GameObject handL, handR;
     float eyeLFOVUpTan, eyeLFOVDownTan, eyeLFOVLeftTan, eyeLFOVRightTan;
     float eyeRFOVUpTan, eyeRFOVDownTan, eyeRFOVLeftTan, eyeRFOVRightTan;
     const float DEG2RAD = (float)(Math.PI / 180);
@@ -12,19 +14,33 @@ public class StereoCamera : MonoBehaviour {
     Vector3 webVREuler = new Vector3();
     Vector3 webVRPosition = new Vector3();
 
+    Vector3 webVRHandLEuler = new Vector3();
+    Vector3 webVRHandLPosition = new Vector3();
+    Vector3 webVRHandREuler = new Vector3();
+    Vector3 webVRHandRPosition = new Vector3();
+    Vector3 handLStartPosition;
+    Vector3 handRStartPosition;
+
     Vector3 myStartPosition;
 
     // Use this for initialization
     void Start()
     {
+        camera = GameObject.Find("Camera");
         cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>();
         cameraL = GameObject.Find("CameraL").GetComponent<Camera>();
         cameraR = GameObject.Find("CameraR").GetComponent<Camera>();
 
-        myTransform = this.transform;
+        handL = GameObject.Find("HandL");
+        handR = GameObject.Find("HandL");
+
+        myTransform = camera.transform;
         myStartPosition = myTransform.localPosition;
         cameraLTransform = cameraL.transform;
         cameraRTransform = cameraR.transform;
+
+        handLStartPosition = handL.transform.localPosition;
+        handRStartPosition = handR.transform.localPosition;
 
         //eyeL_fovUpDegrees(53.09438705444336f);
         //eyeL_fovDownDegrees(53.09438705444336f);
@@ -51,6 +67,23 @@ public class StereoCamera : MonoBehaviour {
         var pos = webVRPosition;
         pos.z *= -1;
         myTransform.localPosition = myStartPosition + pos;
+
+        unityEuler = ConvertWebVREulerToUnity(webVRHandLEuler);
+        unityEuler.x = -unityEuler.x;
+        unityEuler.z = -unityEuler.z;
+        handL.transform.rotation = Quaternion.Euler(unityEuler);
+        pos = webVRHandLPosition;
+        pos.z *= -1;
+        handL.transform.localPosition = handLStartPosition + pos;
+
+        unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
+        unityEuler.x = -unityEuler.x;
+        unityEuler.z = -unityEuler.z;
+        handL.transform.rotation = Quaternion.Euler(unityEuler);
+        pos = webVRHandRPosition;
+        pos.z *= -1;
+        handR.transform.localPosition = handRStartPosition + pos;
+
         StartCoroutine(WaitEndOfFrame());
     }
 
@@ -164,6 +197,20 @@ public class StereoCamera : MonoBehaviour {
     {
         webVRPosition.z = val;
     }
+
+    void handL_euler_X(float val) { webVRHandLEuler.x = val; }
+    void handL_euler_Y(float val) { webVRHandLEuler.y = val; }
+    void handL_euler_Z(float val) { webVRHandLEuler.z = val; }
+    void handL_position_X(float val) { webVRHandLPosition.x = val; }
+    void handL_position_Y(float val) { webVRHandLPosition.y = val; }
+    void handL_position_Z(float val) { webVRHandLPosition.z = val; }
+
+    void handR_euler_X(float val) { webVRHandREuler.x = val; }
+    void handR_euler_Y(float val) { webVRHandREuler.y = val; }
+    void handR_euler_Z(float val) { webVRHandREuler.z = val; }
+    void handR_position_X(float val) { webVRHandRPosition.x = val; }
+    void handR_position_Y(float val) { webVRHandRPosition.y = val; }
+    void handR_position_Z(float val) { webVRHandRPosition.z = val; }
 
     void changeMode(string mode)
     {
