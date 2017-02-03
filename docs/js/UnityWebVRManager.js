@@ -357,4 +357,6 @@
     getVRSensorState();
     raf(update);
   };
+
+  togglePresent();
 })();
