@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 public struct Comment
 {
     public string id;
+    public string author;
     public string message;
     public string positionX;
     public string positionY;
@@ -18,9 +20,10 @@ public class CommentsJSON
     public List<Comment> comments;
 }
 
-public class CommentsContainer : MonoBehaviour
+public class RenderComments : MonoBehaviour
 {
 
+    public Canvas inputPrefab;
     public GameObject commentPrefab;
     public Camera camera;
 
@@ -31,6 +34,8 @@ public class CommentsContainer : MonoBehaviour
     //	List<GameObject> children = new List<GameObject>();
     int commentCount = 0;
 
+    private Vector3 commentPos;
+
     // Use this for initialization
     void Start()
     {
@@ -40,37 +45,50 @@ public class CommentsContainer : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("tab"))
         {
+            Canvas input = Instantiate(inputPrefab) as Canvas;
+            input.GetComponentInChildren<CreateInput>().commentContainer = gameObject;
+            commentPos = camera.transform.position + (camera.transform.forward * 10);
+            /*print("tab key was pressed");
             Vector3 pos = camera.transform.position + (camera.transform.forward * 10);
             StartCoroutine(
                 CreateComment(
                     "3",
+                    "Eugene",
                     "This",
                     pos
                 )
-            );
+            );*/
         }
     }
 
     IEnumerator LoadComments()
     {
+        Debug.Log("Loading Comment");
         WWW www = new WWW("http://hackathon-unity-comments.herokuapp.com/comments");
         yield return www;
         // string json = @"{""comments"":[{""message"": ""hello"", ""rotationX"": ""0.1"", ""rotationY"": ""0.1""}]}";
         RenderPostsFromWWW(www.text);
     }
 
-    IEnumerator CreateComment(string id, string message, Vector3 position)
+    public void CreateCommentPublic(string message)
     {
+        StartCoroutine(CreateComment("3", "Eugene", message, commentPos));
+    }
+
+    IEnumerator CreateComment(string id, string author, string message, Vector3 position)
+    {
+        Debug.Log("Creating Comment");
         string url = "http://hackathon-unity-comments.herokuapp.com/comments/create"
                 + "?message=" + message
+                + "&author=" + author
                 + "&id=" + id
                 + "&positionX=" + position.x
                 + "&positionY=" + position.y
                 + "&positionZ=" + position.z;
         Debug.Log(url);
-        WWW www = new WWW(url);
+        WWW www = new WWW(System.Uri.EscapeUriString(url));
         yield return www;
         RenderPostsFromWWW(www.text);
     }
@@ -109,8 +127,8 @@ public class CommentsContainer : MonoBehaviour
 
         GameObject postInstance = Instantiate(commentPrefab, position, Quaternion.identity) as GameObject;
 
-        postInstance.GetComponent<TextMesh>().text = comment.message;
-        //postInstance.GetComponent<ShowComment>().comment = comment; // set the post data
+        // postInstance.GetComponent<TextMesh>().text = comment.message;
+        postInstance.GetComponent<RenderComment>().comment = comment; // set the post data
         postInstance.transform.LookAt(transform);
         postInstance.transform.Rotate(new Vector3(0, 180, 0));
         postInstance.transform.parent = transform;
