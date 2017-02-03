@@ -100,7 +100,9 @@ public class RenderComments : MonoBehaviour
             OnUpdate(EditorApplication.timeSinceStartup);
         }
 
+#if ENABLE_VR_EDITOR
         WebVRBuilder.Instance.OnEditorUpdate(EditorApplication.timeSinceStartup);
+#endif
     }
 #endif
 
