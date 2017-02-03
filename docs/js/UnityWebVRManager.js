@@ -349,6 +349,8 @@
       initVrEventListeners();
       getEyeParameters();
       resizeCanvas();
+	  // enter VR mode immediately
+	  togglePresent();
       window.requestAnimationFrame(update);
     }).catch(console.error.bind(console));
   };
