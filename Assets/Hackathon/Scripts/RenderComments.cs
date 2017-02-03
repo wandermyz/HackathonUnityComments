@@ -62,11 +62,11 @@ public class RenderComments : MonoBehaviour
 
         OnUpdate(Time.time);
 
-        if (Input.GetKeyDown("tab"))
+        if (Input.GetKeyDown("tab") || Input.GetMouseButtonDown(0))
         {
             Canvas input = Instantiate(inputPrefab) as Canvas;
             input.GetComponentInChildren<CreateInput>().commentContainer = gameObject;
-        }
+        } 
     }
 
     IEnumerator LoadComments()
