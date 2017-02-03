@@ -21,6 +21,7 @@ GameObject:
   - 4: {fileID: 4000013294198724}
   - 23: {fileID: 23000011737701444}
   - 102: {fileID: 102000014152898150}
+  - 114: {fileID: 114000012281185158}
   m_Layer: 0
   m_Name: Comment
   m_TagString: Untagged
@@ -91,3 +92,16 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &114000012281185158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013089666364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa7e4264e5ecac4b9f122cd56225c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RunInEditMode: 0
+  mountDuration: 0.2
