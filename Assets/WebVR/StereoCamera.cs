@@ -21,6 +21,11 @@ public class StereoCamera : MonoBehaviour
     Vector3 handLStartPosition;
     Vector3 handRStartPosition;
 
+    float rotationHoriz = 0.0f;
+    float rotationVert = 0.0f;
+
+    Boolean vrControls = false;
+
     Vector3 myStartPosition;
 
     // Use this for initialization
@@ -60,31 +65,54 @@ public class StereoCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var unityEuler = ConvertWebVREulerToUnity(webVREuler);
-        unityEuler.x = -unityEuler.x;
-        unityEuler.z = -unityEuler.z;
-        myTransform.rotation = Quaternion.Euler(unityEuler);
-        var pos = webVRPosition;
-        pos.z *= -1;
-        myTransform.localPosition = myStartPosition + pos;
+        if (vrControls)
+        {
+            Debug.Log("VR");
+            var unityEuler = ConvertWebVREulerToUnity(webVREuler);
+            unityEuler.x = -unityEuler.x;
+            unityEuler.z = -unityEuler.z;
+            myTransform.rotation = Quaternion.Euler(unityEuler);
+            var pos = webVRPosition;
+            pos.z *= -1;
+            myTransform.localPosition = myStartPosition + pos;
 
-        unityEuler = ConvertWebVREulerToUnity(webVRHandLEuler);
-        unityEuler.x = -unityEuler.x;
-        unityEuler.z = -unityEuler.z;
-        handL.transform.rotation = Quaternion.Euler(unityEuler);
-        pos = webVRHandLPosition;
-        pos.z *= -1;
-        handL.transform.localPosition = handLStartPosition + pos;
+            unityEuler = ConvertWebVREulerToUnity(webVRHandLEuler);
+            unityEuler.x = -unityEuler.x;
+            unityEuler.z = -unityEuler.z;
+            handL.transform.rotation = Quaternion.Euler(unityEuler);
+            pos = webVRHandLPosition;
+            pos.z *= -1;
+            handL.transform.localPosition = handLStartPosition + pos;
 
-        unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
-        unityEuler.x = -unityEuler.x;
-        unityEuler.z = -unityEuler.z;
-        handL.transform.rotation = Quaternion.Euler(unityEuler);
-        pos = webVRHandRPosition;
-        pos.z *= -1;
-        handR.transform.localPosition = handRStartPosition + pos;
+            unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
+            unityEuler.x = -unityEuler.x;
+            unityEuler.z = -unityEuler.z;
+            handL.transform.rotation = Quaternion.Euler(unityEuler);
+            pos = webVRHandRPosition;
+            pos.z *= -1;
+            handR.transform.localPosition = handRStartPosition + pos;
 
-        StartCoroutine(WaitEndOfFrame());
+            StartCoroutine(WaitEndOfFrame());
+
+        } else
+        {
+            float sensitivityY = 20f;
+            float sensitivityX = 20f;
+            float clampAngle = 80.0f;
+            float mouseX = Input.GetAxis("Mouse X");
+            float mouseY = Input.GetAxis("Mouse Y");
+
+            rotationHoriz += mouseX * sensitivityY * Time.deltaTime;
+            rotationVert -= mouseY * sensitivityX * Time.deltaTime;
+
+            Vector3 gyroRotation = Input.gyro.rotationRateUnbiased;
+            rotationVert += -gyroRotation.x;
+            rotationHoriz += -gyroRotation.y;
+
+            rotationVert = Mathf.Clamp(rotationVert, -clampAngle, clampAngle);
+
+            myTransform.rotation = Quaternion.Euler(0.0f, rotationHoriz, rotationVert);
+        }
     }
 
     // Send post render update so we can submitFrame to vrDisplay.
@@ -170,6 +198,8 @@ public class StereoCamera : MonoBehaviour
 
     void euler_x(float val)
     {
+        // start up vrcontrols when we start receiving positions
+        vrControls = true;
         webVREuler.x = val;
     }
 
