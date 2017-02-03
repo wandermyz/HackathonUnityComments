@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 
 [System.Serializable]
 public struct Comment
@@ -12,6 +14,10 @@ public struct Comment
     public string positionX;
     public string positionY;
     public string positionZ;
+    public string orientX;
+    public string orientY;
+    public string orientZ;
+    public string orientW;
 }
 
 [System.Serializable]
@@ -20,6 +26,7 @@ public class CommentsJSON
     public List<Comment> comments;
 }
 
+[ExecuteInEditMode]
 public class RenderComments : MonoBehaviour
 {
 
@@ -27,39 +34,38 @@ public class RenderComments : MonoBehaviour
     public GameObject commentPrefab;
     public Camera camera;
 
-    float commentWidth = 1.0f;
-    float commentHeight = 1.0f; // game units
-    float commentDistance = 10.0f; // game units
+    public float commentWidth = 1.0f;
+    public float commentHeight = 1.0f; // game units
+    public float commentDistance = 10.0f; // game units
+    public float fetchInterval = 5.0f;
 
     //	List<GameObject> children = new List<GameObject>();
     int commentCount = 0;
 
-    private Vector3 commentPos;
+    private double lastRefetchTime = 0;
+    private WWW workingWWW = null;
+
+    private readonly Dictionary<string, GameObject> commentsInScene = new Dictionary<string, GameObject>();
 
     // Use this for initialization
     void Start()
     {
         transform.position = camera.transform.position;
-        StartCoroutine(LoadComments());
     }
 
     private void Update()
     {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        OnUpdate(Time.time);
+
         if (Input.GetKeyDown("tab"))
         {
             Canvas input = Instantiate(inputPrefab) as Canvas;
             input.GetComponentInChildren<CreateInput>().commentContainer = gameObject;
-            commentPos = camera.transform.position + (camera.transform.forward * 10);
-            /*print("tab key was pressed");
-            Vector3 pos = camera.transform.position + (camera.transform.forward * 10);
-            StartCoroutine(
-                CreateComment(
-                    "3",
-                    "Eugene",
-                    "This",
-                    pos
-                )
-            );*/
         }
     }
 
@@ -72,21 +78,94 @@ public class RenderComments : MonoBehaviour
         RenderPostsFromWWW(www.text);
     }
 
-    public void CreateCommentPublic(string message)
+    void OnEnable()
     {
-        StartCoroutine(CreateComment("3", "Eugene", message, commentPos));
+        while (transform.childCount > 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+        commentsInScene.Clear();
+
+#if UNITY_EDITOR
+        Debug.Log("Comment container OnEnable");
+        EditorApplication.update = OnEditorUpdate;
+#endif
     }
 
-    IEnumerator CreateComment(string id, string author, string message, Vector3 position)
+#if UNITY_EDITOR
+    private void OnEditorUpdate()
+    {
+        if (!Application.isPlaying)
+        {
+            OnUpdate(EditorApplication.timeSinceStartup);
+        }
+    }
+#endif
+
+    private void OnUpdate(double time)
+    {
+        if (!enabled || !gameObject.activeSelf)
+        {
+            return;
+        }
+
+        foreach (Transform t in transform)
+        {
+            var commentAnimator = t.GetComponent<CommentAnimator>();
+            if (commentAnimator != null)
+            {
+                commentAnimator.OnUpdate(time);
+            }
+        }
+
+        if (workingWWW != null)
+        {
+            if (!workingWWW.isDone)
+            {
+                return;
+            }
+
+            RenderPostsFromWWW(workingWWW.text);
+            workingWWW = null;
+        }
+
+        if (time - lastRefetchTime < fetchInterval)
+        {
+            return;
+        }
+
+        Debug.Log("Refetching comments...");
+        workingWWW =  new WWW("https://hackathon-unity-comments.herokuapp.com/comments");
+        lastRefetchTime = time;
+        // string json = @"{""comments"":[{""message"": ""hello"", ""rotationX"": ""0.1"", ""rotationY"": ""0.1""}]}";
+    }
+
+    public void CreateCommentPublic(string message)
+    {
+        Vector3 position = camera.transform.position + camera.transform.forward * commentDistance;
+        Quaternion rotation = camera.transform.rotation;
+        StartCoroutine(CreateComment(GetRandomString(5), "Eugene", message, position, rotation));
+    }
+    public static string GetRandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+          .Select(s => s[(int)(Random.Range(0, s.Length))]).ToArray());
+    }
+
+    IEnumerator CreateComment(string id, string author, string message, Vector3 position, Quaternion rotation)
     {
         Debug.Log("Creating Comment");
-        string url = "http://hackathon-unity-comments.herokuapp.com/comments/create"
-                + "?message=" + message
-                + "&author=" + author
-                + "&id=" + id
-                + "&positionX=" + position.x
-                + "&positionY=" + position.y
-                + "&positionZ=" + position.z;
+        string url = "https://hackathon-unity-comments.herokuapp.com/comments/create" + "?message=" + message
+                     + "&author=" + author
+                     + "&id=" + id
+                     + "&positionX=" + position.x
+                     + "&positionY=" + position.y
+                     + "&positionZ=" + position.z
+                     + "&orientX=" + rotation.x
+                     + "&orientY=" + rotation.y
+                     + "&orientZ=" + rotation.z
+                     + "&orientW=" + rotation.w;
         Debug.Log(url);
         WWW www = new WWW(System.Uri.EscapeUriString(url));
         yield return www;
@@ -103,14 +182,24 @@ public class RenderComments : MonoBehaviour
 
     private void RenderPosts(List<Comment> comments)
     {
-        foreach (Transform child in transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+        HashSet<string> commentsToDelete = new HashSet<string>(commentsInScene.Keys);
 
         foreach (Comment comment in comments)
         {
+            string id = comment.id;
+
+            if (commentsToDelete.Contains(id))
+            {
+                commentsToDelete.Remove(id);
+            }
             RenderComment(comment);
+        }
+
+        foreach (string key in commentsToDelete)
+        {
+            GameObject c = commentsInScene[key];
+            commentsInScene.Remove(key);
+            DestroyImmediate(c);
         }
     }
 
@@ -122,15 +211,31 @@ public class RenderComments : MonoBehaviour
         float px = float.Parse(comment.positionX);
         float py = float.Parse(comment.positionY);
         float pz = float.Parse(comment.positionZ);
+        float rx = float.Parse(comment.orientX);
+        float ry = float.Parse(comment.orientY);
+        float rz = float.Parse(comment.orientZ);
+        float rw = float.Parse(comment.orientW);
         Debug.Log(comment.id + comment.message + ' ' + px + ' ' + py + ' ' + pz);
         Vector3 position = new Vector3(px, py, pz);
+        Quaternion rotation = new Quaternion(rx, ry, rz, rw);
 
-        GameObject postInstance = Instantiate(commentPrefab, position, Quaternion.identity) as GameObject;
+        GameObject postInstance;
+        if (commentsInScene.ContainsKey(comment.id))
+        {
+            postInstance = commentsInScene[comment.id];
+        }
+        else
+        {
+            postInstance = Instantiate(commentPrefab);
+            postInstance.name = "comment_" + comment.id;
+            commentsInScene.Add(comment.id, postInstance);
+        }
 
-        // postInstance.GetComponent<TextMesh>().text = comment.message;
         postInstance.GetComponent<RenderComment>().comment = comment; // set the post data
-        postInstance.transform.LookAt(transform);
-        postInstance.transform.Rotate(new Vector3(0, 180, 0));
+        postInstance.transform.position = position;
+        postInstance.transform.rotation = rotation;
+        // postInstance.transform.LookAt(transform);
+        // postInstance.transform.Rotate(new Vector3(0, 180, 0));
         postInstance.transform.parent = transform;
         commentCount++;
     }

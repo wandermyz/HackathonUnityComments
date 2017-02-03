@@ -1,13 +1,27 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
+[ExecuteInEditMode]
 public class RenderComment : MonoBehaviour {
 
     public Comment comment;
 
+    public Material agatha;
+    public Material eugene;
+    public Material kevin;
+
 	// Use this for initialization
-	void Start () {
+    void Start()
+    {
+        Dictionary<string, Material> materials = new Dictionary<string, Material>()
+        {
+            {"Agatha", agatha},
+            {"Eugene", eugene},
+            {"Kevin", kevin}
+        };
+
         GameObject author = transform.FindChild("Author").gameObject;
         author.GetComponent<TextMesh>().text = comment.author;
 
@@ -20,8 +34,16 @@ public class RenderComment : MonoBehaviour {
         card.transform.localScale = new Vector3(1, 1 + numLines * 0.25f, 1);
 
         GameObject image = transform.FindChild("Image").gameObject;
+
+        /*
         image.GetComponent<Renderer>().material.mainTexture =
             (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/Hackathon/Textures/" + comment.author + ".jpg", typeof(Texture2D));
+            */
+
+        if (materials.ContainsKey(comment.author))
+        {
+            image.GetComponent<Renderer>().material = materials[comment.author];
+        }
     }
 
     // Wrap text by line height

@@ -22,7 +22,7 @@ GameObject:
   - 33: {fileID: 33000013405778374}
   - 65: {fileID: 65000011421443328}
   - 23: {fileID: 23000014123731526}
-  - 114: {fileID: 114000011901388346}
+  - 114: {fileID: 114000012359415598}
   m_Layer: 0
   m_Name: CommentContainer
   m_TagString: Untagged
@@ -91,7 +91,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114000011901388346
+--- !u!114 &114000012359415598
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -99,13 +99,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010858177248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c14a033c2c8b95d4f84333d2e44b9839, type: 3}
+  m_Script: {fileID: 11500000, guid: cfccff129f609eb48aee67b9d0a5af0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_RunInEditMode: 0
-  m_RunInEditMode: 0
-  inputPrefab: {fileID: 223000011896086510, guid: 33e34cdc1d246544885601bdca35c1e8,
+  inputPrefab: {fileID: 223000011896086510, guid: a40257a74fd6ae948b85e18f3cad82a1,
     type: 2}
-  commentPrefab: {fileID: 1000010826493170, guid: 1a806147343bf954e82d29110e38dad0,
+  commentPrefab: {fileID: 1000010826493170, guid: 1e8141ce4e3073047b8091d0e89758b6,
     type: 2}
   camera: {fileID: 0}
+  commentWidth: 1
+  commentHeight: 1
+  commentDistance: 10
+  fetchInterval: 5

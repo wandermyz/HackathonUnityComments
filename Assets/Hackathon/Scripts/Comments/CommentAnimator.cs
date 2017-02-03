@@ -11,13 +11,14 @@ public class CommentAnimator : MonoBehaviour
 
 	void Start ()
 	{
-	    initScale = transform.localScale;
+	    initScale = Vector3.one; 
+        transform.localScale = Vector3.zero;
 	    startTime = -1;
 	}
 	
 	void Update ()
 	{
-	    if (!Application.isEditor)
+	    if (Application.isPlaying)
 	    {
 	        OnUpdate(Time.time);
 	    }
@@ -36,13 +37,8 @@ public class CommentAnimator : MonoBehaviour
         }
 
 	    double ratio = (time - startTime) / mountDuration;
-
-        if (ratio > 1)
-        {
-            return;
-        }
-
 	    float scale = Mathf.Lerp(0, 1, (float)ratio);
+
 	    transform.localScale = initScale * scale;
     }
 }

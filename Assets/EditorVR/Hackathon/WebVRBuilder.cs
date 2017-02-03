@@ -30,7 +30,7 @@ public class WebVRBuilder
     [MenuItem("Oculus/Share WebVR")]
     public static void ShareMenuItem()
     {
-        instance.ShareToGit();
+        Instance.ShareToGit();
     }
 
     [MenuItem("Oculus/Test")]
@@ -62,9 +62,12 @@ public class WebVRBuilder
         path = path.Replace("/", "\\");
         path = Path.GetFullPath(path);
 
-        string sharedPath = Share.SyncFolderToGit(path);
-        EditorGUIUtility.systemCopyBuffer = sharedPath;
-        Debug.Log(sharedPath + " copied to clipboard.");
+        string dest = Share.SyncFolderToGit(path, (url) =>
+        {
+            Debug.Log("Sync done");
+        });
+
+        EditorGUIUtility.systemCopyBuffer = dest;
     }
 }
 #endif

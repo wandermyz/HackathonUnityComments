@@ -57,7 +57,7 @@ GameObject:
   - 222: {fileID: 222000011374154868}
   - 114: {fileID: 114000014241212348}
   - 114: {fileID: 114000011813877258}
-  - 114: {fileID: 114000012610216428}
+  - 114: {fileID: 114000012490054608}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -179,6 +179,20 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+--- !u!114 &114000012490054608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012251806126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7314662d894a376408ea4a3b61c668c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RunInEditMode: 0
+  mainInputField: {fileID: 114000011813877258}
+  commentContainer: {fileID: 0}
 --- !u!114 &114000012601332008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -196,21 +210,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114000012610216428
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012251806126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2de1698fd748fa40947fa08f18c328e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RunInEditMode: 0
-  m_RunInEditMode: 0
-  mainInputField: {fileID: 114000011813877258}
-  commentContainer: {fileID: 0}
 --- !u!114 &114000012876036548
 MonoBehaviour:
   m_ObjectHideFlags: 1
