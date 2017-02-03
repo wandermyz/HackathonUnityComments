@@ -46,7 +46,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 432450}
-  - 114: {fileID: 11473352}
+  - 114: {fileID: 114000010352692382}
   m_Layer: 0
   m_Name: WebVRCameraSet
   m_TagString: Untagged
@@ -272,18 +272,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 171670}
   m_Enabled: 1
---- !u!114 &11473352
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 180794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7005d9107fa61d4b8618f2cebe09f09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RunInEditMode: 0
 --- !u!124 &12423720
 Behaviour:
   m_ObjectHideFlags: 1
@@ -316,3 +304,15 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 180794}
   m_IsPrefabParent: 1
+--- !u!114 &114000010352692382
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 180794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d5e5bd7d645db4ea139779795a7fca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RunInEditMode: 0
