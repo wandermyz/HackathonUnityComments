@@ -363,6 +363,9 @@ namespace UnityEditor.Experimental.EditorVR
 
 		private IEnumerator Start()
 		{
+		    GameObject userIgnoredRoot = GameObject.FindGameObjectWithTag("VREditorIgnore");
+		    userIgnoredRoot.transform.parent = transform;
+
 			// Delay until at least one proxy initializes
 			bool proxyActive = false;
 			while (!proxyActive)
@@ -464,6 +467,9 @@ namespace UnityEditor.Experimental.EditorVR
 
 		void OnDestroy()
 		{
+		    GameObject userIgnoredRoot = GameObject.FindGameObjectWithTag("VREditorIgnore");
+		    userIgnoredRoot.transform.parent = null;
+
 			if (m_CustomPreviewCamera != null)
 				U.Object.Destroy(((MonoBehaviour)m_CustomPreviewCamera).gameObject);
 
@@ -1444,6 +1450,8 @@ namespace UnityEditor.Experimental.EditorVR
 
 		void ConnectInterfaces(object obj, Transform rayOrigin = null)
 		{
+            Debug.Log(obj);
+
 			if (!m_ConnectedInterfaces.Add(obj))
 				return;
 
