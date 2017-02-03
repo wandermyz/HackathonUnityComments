@@ -38,6 +38,18 @@ public class WebVRBuilder
     {
     }
 
+    private string sharedUrl;
+
+    public void OnEditorUpdate(double time)
+    {
+        if (sharedUrl != null)
+        {
+            Debug.Log("Share sync done on main thread");
+            Application.OpenURL(sharedUrl);
+            sharedUrl = null;
+        }
+    }
+
     public void Build(string path = null)
     {
         if (path == null)
@@ -55,6 +67,8 @@ public class WebVRBuilder
 
     public void ShareToGit(string path = null)
     {
+        sharedUrl = null;
+
         if (path == null)
         {
             path = EditorUtility.OpenFolderPanel("Choose Location of WebVR Build", "", "");
@@ -65,6 +79,8 @@ public class WebVRBuilder
         string dest = Share.SyncFolderToGit(path, (url) =>
         {
             Debug.Log("Sync done");
+
+            sharedUrl = url;
         });
 
         EditorGUIUtility.systemCopyBuffer = dest;

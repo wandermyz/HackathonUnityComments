@@ -17,12 +17,8 @@ public class CameraMovement : MonoBehaviour
 	    float movementX = Input.GetAxis("Horizontal");
 	    float movementY = Input.GetAxis("Vertical");
 
-        Debug.Log(movementX + ", " + movementY);
-
 	    Vector3 movement = cameraMain.transform.forward * movementY * speed * Time.deltaTime;
 	    movement += cameraMain.transform.right * movementX * speed * Time.deltaTime;
-
-        Debug.Log("movement: " + movement);
 
         transform.Translate(movement, Space.World);
 	}

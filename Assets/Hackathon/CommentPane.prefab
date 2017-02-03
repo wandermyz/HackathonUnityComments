@@ -163,7 +163,7 @@ Transform:
   m_GameObject: {fileID: 1000010199174182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.7, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.25, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000010865073756}
@@ -190,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 1000010826493170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011316289114}
@@ -299,7 +299,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4df50c49992990246a64fbcff264b337, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -408,7 +408,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012216669576}
-  m_Text: Wow how great!
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -429,7 +429,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013991154048}
-  m_Text: Agatha
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -462,6 +462,10 @@ MonoBehaviour:
     positionX: 
     positionY: 
     positionZ: 
+    orientX: 
+    orientY: 
+    orientZ: 
+    orientW: 
   agatha: {fileID: 2100000, guid: a934e6b575d11f449a8256e247b18325, type: 2}
   eugene: {fileID: 2100000, guid: 54186a8d546d45648aa51658c656ed51, type: 2}
   kevin: {fileID: 2100000, guid: 9a7362c6cc412274da9c9250eee301fe, type: 2}

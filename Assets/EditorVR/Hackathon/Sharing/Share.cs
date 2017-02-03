@@ -16,13 +16,13 @@ public static class Share
 
         string subfolder = GetRandomString(12);
         string destinationPath = string.Format("{0}\\{1}\\", DestinationPathRoot, subfolder);
-        string url = HostURL + subfolder;
+        string url = HostURL + subfolder + "/index.html";
 
         Process process = new Process();
         ProcessStartInfo startInfo = new ProcessStartInfo();
         
         startInfo.FileName = "C:\\Windows\\System32\\cmd.exe";
-        startInfo.Arguments = string.Format("/C xcopy /S {0}\\* {1} /e /Y && cd {2} && git add -A && git commit -m \"Sync\" && git pull --rebase && git push", sourcePath, destinationPath, DestinationPathRoot);
+        startInfo.Arguments = string.Format("/C xcopy /S {0}\\* {1} /e /Y && cd {2} && git add -A && git commit -m \"Share {3}\" && git pull --rebase && git push", sourcePath, destinationPath, DestinationPathRoot, subfolder);
         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
         startInfo.UseShellExecute = false;
         startInfo.RedirectStandardOutput = true;
