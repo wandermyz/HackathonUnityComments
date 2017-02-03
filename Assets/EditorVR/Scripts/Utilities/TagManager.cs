@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Diagnostics;
+using UnityEditor;
 
 namespace UnityEngine.Experimental.EditorVR.Utilities
 {
@@ -13,6 +14,8 @@ namespace UnityEngine.Experimental.EditorVR.Utilities
 		/// <param name="tag">Tag to add</param>
 		public static void AddTag(string tag)
 		{
+
+#if ENABLE_VR_EDITOR
 			var asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
 			if ((asset != null) && (asset.Length > 0))
 			{
@@ -38,6 +41,7 @@ namespace UnityEngine.Experimental.EditorVR.Utilities
 				so.ApplyModifiedProperties();
 				so.Update();
 			}
+#endif
 		}
 
 		/// <summary>
@@ -45,8 +49,10 @@ namespace UnityEngine.Experimental.EditorVR.Utilities
 		/// Start at layer 31 (max) and work down
 		/// </summary>
 		/// <param name="layerName"></param>
+        [Conditional("ENABLE_VR_EDITOR")]
 		public static void AddLayer(string layerName)
 		{
+#if ENABLE_VR_EDITOR
 			var asset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset");
 			if ((asset != null) && (asset.Length > 0))
 			{
@@ -82,6 +88,7 @@ namespace UnityEngine.Experimental.EditorVR.Utilities
 				so.ApplyModifiedProperties();
 				so.Update();
 			}
+#endif
 		}
 	}
 }

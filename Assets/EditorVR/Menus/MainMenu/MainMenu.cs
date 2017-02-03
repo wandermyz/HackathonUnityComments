@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine.InputNew;
 using UnityEngine.Experimental.EditorVR.Actions;
 using UnityEngine.Experimental.EditorVR.Handles;
@@ -187,7 +188,10 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 					{
 					    b.button.onClick.AddListener(() =>
 					    {
-					        Debug.Log("Oculus tool triggered!");
+					        ConstructorInfo ctor = selectedType.GetConstructor(new Type[0]);
+					        object instance = ctor.Invoke(new object[0]);
+					        var method = selectedType.GetMethod("OnClick");
+					        method.Invoke(instance, new object[0]);
 					    });
 					}
 				});
