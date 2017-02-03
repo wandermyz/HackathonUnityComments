@@ -350,7 +350,14 @@
       getEyeParameters();
       resizeCanvas();
 	  // enter VR mode immediately
-	  btnVrToggleOnClick();
+	  setTimeout(
+		() => {
+			console.log('onClick!!');
+			btnVrToggleOnClick();
+			requestPresent();
+		},
+		1000,
+	  );
       window.requestAnimationFrame(update);
     }).catch(console.error.bind(console));
   };
