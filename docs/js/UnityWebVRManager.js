@@ -350,7 +350,7 @@
       getEyeParameters();
       resizeCanvas();
 	  // enter VR mode immediately
-	  togglePresent();
+	  btnVrToggleOnClick();
       window.requestAnimationFrame(update);
     }).catch(console.error.bind(console));
   };
@@ -359,6 +359,4 @@
     getVRSensorState();
     raf(update);
   };
-
-  togglePresent();
 })();
