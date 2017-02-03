@@ -1,3 +1,4 @@
+/Build/*
 *.opendb
 *.db
 *.vcxproj.user
