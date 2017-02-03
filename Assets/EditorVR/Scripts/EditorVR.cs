@@ -467,9 +467,6 @@ namespace UnityEditor.Experimental.EditorVR
 
 		void OnDestroy()
 		{
-		    GameObject userIgnoredRoot = GameObject.FindGameObjectWithTag("VREditorIgnore");
-		    userIgnoredRoot.transform.parent = null;
-
 			if (m_CustomPreviewCamera != null)
 				U.Object.Destroy(((MonoBehaviour)m_CustomPreviewCamera).gameObject);
 
@@ -2916,6 +2913,9 @@ namespace UnityEditor.Experimental.EditorVR
 
 		private static void OnEVRDisabled()
 		{
+		    GameObject userIgnoredRoot = GameObject.FindGameObjectWithTag("VREditorIgnore");
+		    userIgnoredRoot.transform.parent = null;
+
 			U.Object.Destroy(s_Instance.gameObject);
 			U.Object.Destroy(s_InputManager.gameObject);
 		}
