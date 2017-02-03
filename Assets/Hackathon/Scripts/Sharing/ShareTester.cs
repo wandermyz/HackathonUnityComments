@@ -6,8 +6,10 @@ public class ShareTester : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Share.SyncFolderToGit(TestSourcePath);
+        Share.SyncFolderToGit(TestSourcePath, (string path) => { UnityEngine.Debug.Log("CALLBACK!"); UnityEngine.Debug.Log(path);  });
 	}
+
+    private 
 	
 	// Update is called once per frame
 	void Update () {
