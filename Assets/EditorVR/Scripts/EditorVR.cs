@@ -151,6 +151,7 @@ namespace UnityEditor.Experimental.EditorVR
 		private List<ActionMenuData> m_MenuActions = new List<ActionMenuData>();
 		private List<Type> m_AllTools;
 		private List<Type> m_AllWorkspaceTypes;
+	    private List<Type> m_AllOculusToolsTypes;
 		private List<IAction> m_Actions;
 		List<Type> m_MainMenuTools;
 		private readonly List<IWorkspace> m_Workspaces = new List<IWorkspace>();
@@ -285,6 +286,7 @@ namespace UnityEditor.Experimental.EditorVR
 			m_AllTools = U.Object.GetImplementationsOfInterface(typeof(ITool)).ToList();
 			m_MainMenuTools = m_AllTools.Where(t => !IsPermanentTool(t)).ToList(); // Don't show tools that can't be selected/toggled
 			m_AllWorkspaceTypes = U.Object.GetImplementationsOfInterface(typeof(IWorkspace)).ToList();
+		    m_AllOculusToolsTypes = U.Object.GetImplementationsOfInterface(typeof(IOculusTools)).ToList();
 
 			UnityBrandColorScheme.sessionGradient = UnityBrandColorScheme.GetRandomGradient();
 
@@ -1588,6 +1590,7 @@ namespace UnityEditor.Experimental.EditorVR
 			{
 				mainMenu.menuTools = m_MainMenuTools;
 				mainMenu.menuWorkspaces = m_AllWorkspaceTypes.ToList();
+			    mainMenu.menuOculusTools = m_AllOculusToolsTypes;
 				mainMenu.isToolActive = IsToolActive;
 			}
 

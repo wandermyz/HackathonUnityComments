@@ -70,6 +70,7 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 		public List<Type> menuTools { private get; set; }
 		public Func<Transform, Type, bool> selectTool { private get; set; }
 		public List<Type> menuWorkspaces { private get; set; }
+		public List<Type> menuOculusTools { private get; set; }
 		public CreateWorkspaceDelegate createWorkspace { private get; set; }
 		public List<ActionMenuData> menuActions { get; set; }
 		public ConnectInterfacesDelegate connectInterfaces { private get; set; }
@@ -90,6 +91,7 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 
 			CreateFaceButtons(menuTools);
 			CreateFaceButtons(menuWorkspaces);
+            CreateFaceButtons(menuOculusTools);
 			m_MainMenuUI.SetupMenuFaces();
 			UpdateToolButtons();
 		}
@@ -129,6 +131,7 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 
 				var isTool = typeof(ITool).IsAssignableFrom(type);
 				var isWorkspace = typeof(Workspace).IsAssignableFrom(type);
+			    var isOculusTool = typeof(IOculusTools).IsAssignableFrom(type);
 
 				var buttonData = new MainMenuUI.ButtonData();
 				buttonData.name = type.Name;
@@ -148,6 +151,11 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 					// For workspaces that haven't specified a custom attribute, do some menu categorization automatically
 					buttonData.name = type.Name.Replace("Workspace", string.Empty);
 					buttonData.sectionName = "Workspaces";
+				}
+                else if (isOculusTool)
+				{
+					buttonData.name = type.Name.Replace("Oculus", string.Empty);
+				    buttonData.sectionName = "Oculus";
 				}
 
 				var selectedType = type; // Local variable for proper closure
@@ -174,6 +182,13 @@ namespace UnityEngine.Experimental.EditorVR.Menus
 							if (visible)
 								createWorkspace(selectedType);
 						});
+					}
+                    else if (isOculusTool)
+					{
+					    b.button.onClick.AddListener(() =>
+					    {
+					        Debug.Log("Oculus tool triggered!");
+					    });
 					}
 				});
 			}
