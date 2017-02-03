@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
 [System.Serializable]
 public struct Comment
@@ -18,28 +19,32 @@ public class CommentsJSON
     public List<Comment> comments;
 }
 
+[ExecuteInEditMode]
 public class CommentsContainer : MonoBehaviour
 {
-
     public GameObject commentPrefab;
     public Camera camera;
 
-    float commentWidth = 1.0f;
-    float commentHeight = 1.0f; // game units
-    float commentDistance = 10.0f; // game units
+    public float commentWidth = 1.0f;
+    public float commentHeight = 1.0f; // game units
+    public float commentDistance = 10.0f; // game units
+    public float fetchInterval = 10000.0f;
 
     //	List<GameObject> children = new List<GameObject>();
     int commentCount = 0;
+
+    private double lastRefetchTime = 0;
+    private WWW workingWWW = null;
 
     // Use this for initialization
     void Start()
     {
         transform.position = camera.transform.position;
-        StartCoroutine(LoadComments());
     }
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown("space"))
         {
             Vector3 pos = camera.transform.position + (camera.transform.forward * 10);
@@ -51,14 +56,56 @@ public class CommentsContainer : MonoBehaviour
                 )
             );
         }
+        */
     }
 
     IEnumerator LoadComments()
     {
-        WWW www = new WWW("http://hackathon-unity-comments.herokuapp.com/comments");
-        yield return www;
+        while (true)
+        {
+            Debug.Log("Refetching comments...");
+            WWW www = new WWW("http://hackathon-unity-comments.herokuapp.com/comments");
+            yield return www;
+            // string json = @"{""comments"":[{""message"": ""hello"", ""rotationX"": ""0.1"", ""rotationY"": ""0.1""}]}";
+            RenderPostsFromWWW(www.text);
+
+            yield return new WaitForSeconds(fetchInterval);
+        }
+    }
+
+    void OnEnable()
+    {
+        Debug.Log("Comment container OnEnable");
+        EditorApplication.update = OnEditorUpdate;
+    }
+
+    private void OnEditorUpdate()
+    {
+        if (!enabled || !gameObject.activeSelf)
+        {
+            return;
+        }
+
+        if (workingWWW != null)
+        {
+            if (!workingWWW.isDone)
+            {
+                return;
+            }
+
+            RenderPostsFromWWW(workingWWW.text);
+            workingWWW = null;
+        }
+
+        if (EditorApplication.timeSinceStartup - lastRefetchTime < fetchInterval)
+        {
+            return;
+        }
+
+        Debug.Log("Refetching comments...");
+        workingWWW =  new WWW("http://hackathon-unity-comments.herokuapp.com/comments");
+        lastRefetchTime = EditorApplication.timeSinceStartup;
         // string json = @"{""comments"":[{""message"": ""hello"", ""rotationX"": ""0.1"", ""rotationY"": ""0.1""}]}";
-        RenderPostsFromWWW(www.text);
     }
 
     IEnumerator CreateComment(string id, string message, Vector3 position)
@@ -87,7 +134,7 @@ public class CommentsContainer : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            GameObject.Destroy(child.gameObject);
+            GameObject.DestroyImmediate(child.gameObject);
         }
 
         foreach (Comment comment in comments)
@@ -104,7 +151,7 @@ public class CommentsContainer : MonoBehaviour
         float px = float.Parse(comment.positionX);
         float py = float.Parse(comment.positionY);
         float pz = float.Parse(comment.positionZ);
-        Debug.Log(comment.id + comment.message + ' ' + px + ' ' + py + ' ' + pz);
+        Debug.Log(comment.id + ' ' + comment.message + ' ' + px + ' ' + py + ' ' + pz);
         Vector3 position = new Vector3(px, py, pz);
 
         GameObject postInstance = Instantiate(commentPrefab, position, Quaternion.identity) as GameObject;
