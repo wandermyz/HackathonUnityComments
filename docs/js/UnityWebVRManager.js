@@ -354,7 +354,7 @@
       resizeCanvas();
 	  // enter VR mode immediately
 	  setTimeout(
-		() => {
+		function () {
 			console.log('onClick!!');
 			togglePresent();
 		},
