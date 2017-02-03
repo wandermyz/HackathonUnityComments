@@ -2,11 +2,9 @@
 using System.Collections;
 using System;
 
-public class StereoCamera : MonoBehaviour
-{
-    GameObject camera;
+public class StereoCamera : MonoBehaviour {
+
     Camera cameraMain, cameraL, cameraR;
-    GameObject handL, handR;
     float eyeLFOVUpTan, eyeLFOVDownTan, eyeLFOVLeftTan, eyeLFOVRightTan;
     float eyeRFOVUpTan, eyeRFOVDownTan, eyeRFOVLeftTan, eyeRFOVRightTan;
     const float DEG2RAD = (float)(Math.PI / 180);
@@ -14,38 +12,19 @@ public class StereoCamera : MonoBehaviour
     Vector3 webVREuler = new Vector3();
     Vector3 webVRPosition = new Vector3();
 
-    Vector3 webVRHandLEuler = new Vector3();
-    Vector3 webVRHandLPosition = new Vector3();
-    Vector3 webVRHandREuler = new Vector3();
-    Vector3 webVRHandRPosition = new Vector3();
-    Vector3 handLStartPosition;
-    Vector3 handRStartPosition;
-
-    float rotationHoriz = 0.0f;
-    float rotationVert = 0.0f;
-
-    Boolean vrControls = false;
-
     Vector3 myStartPosition;
 
     // Use this for initialization
     void Start()
     {
-        camera = GameObject.Find("Camera");
         cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>();
         cameraL = GameObject.Find("CameraL").GetComponent<Camera>();
         cameraR = GameObject.Find("CameraR").GetComponent<Camera>();
 
-        handL = GameObject.Find("HandL");
-        handR = GameObject.Find("HandL");
-
-        myTransform = camera.transform;
+        myTransform = this.transform;
         myStartPosition = myTransform.localPosition;
         cameraLTransform = cameraL.transform;
         cameraRTransform = cameraR.transform;
-
-        handLStartPosition = handL.transform.localPosition;
-        handRStartPosition = handR.transform.localPosition;
 
         //eyeL_fovUpDegrees(53.09438705444336f);
         //eyeL_fovDownDegrees(53.09438705444336f);
@@ -65,54 +44,14 @@ public class StereoCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (vrControls)
-        {
-            Debug.Log("VR");
-            var unityEuler = ConvertWebVREulerToUnity(webVREuler);
-            unityEuler.x = -unityEuler.x;
-            unityEuler.z = -unityEuler.z;
-            myTransform.rotation = Quaternion.Euler(unityEuler);
-            var pos = webVRPosition;
-            pos.z *= -1;
-            myTransform.localPosition = myStartPosition + pos;
-
-            unityEuler = ConvertWebVREulerToUnity(webVRHandLEuler);
-            unityEuler.x = -unityEuler.x;
-            unityEuler.z = -unityEuler.z;
-            handL.transform.rotation = Quaternion.Euler(unityEuler);
-            pos = webVRHandLPosition;
-            pos.z *= -1;
-            handL.transform.localPosition = handLStartPosition + pos;
-
-            unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
-            unityEuler.x = -unityEuler.x;
-            unityEuler.z = -unityEuler.z;
-            handL.transform.rotation = Quaternion.Euler(unityEuler);
-            pos = webVRHandRPosition;
-            pos.z *= -1;
-            handR.transform.localPosition = handRStartPosition + pos;
-
-            StartCoroutine(WaitEndOfFrame());
-
-        } else
-        {
-            float sensitivityY = 20f;
-            float sensitivityX = 20f;
-            float clampAngle = 80.0f;
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
-
-            rotationHoriz += mouseX * sensitivityY * Time.deltaTime;
-            rotationVert -= mouseY * sensitivityX * Time.deltaTime;
-
-            Vector3 gyroRotation = Input.gyro.rotationRateUnbiased;
-            rotationVert += -gyroRotation.x;
-            rotationHoriz += -gyroRotation.y;
-
-            rotationVert = Mathf.Clamp(rotationVert, -clampAngle, clampAngle);
-
-            myTransform.rotation = Quaternion.Euler(0.0f, rotationHoriz, rotationVert);
-        }
+        var unityEuler = ConvertWebVREulerToUnity(webVREuler);
+        unityEuler.x = -unityEuler.x;
+        unityEuler.z = -unityEuler.z;
+        myTransform.rotation = Quaternion.Euler(unityEuler);
+        var pos = webVRPosition;
+        pos.z *= -1;
+        myTransform.localPosition = myStartPosition + pos;
+        StartCoroutine(WaitEndOfFrame());
     }
 
     // Send post render update so we can submitFrame to vrDisplay.
@@ -198,8 +137,6 @@ public class StereoCamera : MonoBehaviour
 
     void euler_x(float val)
     {
-        // start up vrcontrols when we start receiving positions
-        vrControls = true;
         webVREuler.x = val;
     }
 
@@ -227,20 +164,6 @@ public class StereoCamera : MonoBehaviour
     {
         webVRPosition.z = val;
     }
-
-    void handL_euler_X(float val) { webVRHandLEuler.x = val; }
-    void handL_euler_Y(float val) { webVRHandLEuler.y = val; }
-    void handL_euler_Z(float val) { webVRHandLEuler.z = val; }
-    void handL_position_X(float val) { webVRHandLPosition.x = val; }
-    void handL_position_Y(float val) { webVRHandLPosition.y = val; }
-    void handL_position_Z(float val) { webVRHandLPosition.z = val; }
-
-    void handR_euler_X(float val) { webVRHandREuler.x = val; }
-    void handR_euler_Y(float val) { webVRHandREuler.y = val; }
-    void handR_euler_Z(float val) { webVRHandREuler.z = val; }
-    void handR_position_X(float val) { webVRHandRPosition.x = val; }
-    void handR_position_Y(float val) { webVRHandRPosition.y = val; }
-    void handR_position_Z(float val) { webVRHandRPosition.z = val; }
 
     void changeMode(string mode)
     {
