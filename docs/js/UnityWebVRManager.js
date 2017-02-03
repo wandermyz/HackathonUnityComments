@@ -21,6 +21,9 @@
   btnFsEnter.addEventListener('click', btnFsEnterOnClick);
   btnVrToggle.addEventListener('click', btnVrToggleOnClick);
   btnVrReset.addEventListener('click', btnVrResetOnClick);
+  
+  //togglePresent();
+  
 
   function btnFsEnterOnClick () {
     // FYI: Unity's `SetFullscreen` doesn't call the unprefixed Fullscreen API.
@@ -353,8 +356,7 @@
 	  setTimeout(
 		() => {
 			console.log('onClick!!');
-			btnVrToggleOnClick();
-			requestPresent();
+			togglePresent();
 		},
 		1000,
 	  );
