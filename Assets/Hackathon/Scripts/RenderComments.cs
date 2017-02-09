@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +28,8 @@ public class CommentsJSON
 [ExecuteInEditMode]
 public class RenderComments : MonoBehaviour
 {
-
-    public Canvas inputPrefab;
     public GameObject commentPrefab;
+
     public Camera camera;
 
     public float commentWidth = 1.0f;
@@ -50,6 +48,7 @@ public class RenderComments : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // the comments container starts where the camera does
         transform.position = camera.transform.position;
     }
 
@@ -61,12 +60,6 @@ public class RenderComments : MonoBehaviour
         }
 
         OnUpdate(Time.time);
-
-        if (Input.GetKeyDown("tab") || Input.GetMouseButtonDown(0))
-        {
-            Canvas input = Instantiate(inputPrefab) as Canvas;
-            input.GetComponentInChildren<CreateInput>().commentContainer = gameObject;
-        } 
     }
 
     IEnumerator LoadComments()

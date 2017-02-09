@@ -19,10 +19,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 4000011858655382}
-  - 33: {fileID: 33000013405778374}
-  - 65: {fileID: 65000011421443328}
-  - 23: {fileID: 23000014123731526}
   - 114: {fileID: 114000012359415598}
+  - 114: {fileID: 114000010850411364}
   m_Layer: 0
   m_Name: CommentContainer
   m_TagString: Untagged
@@ -43,54 +41,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &23000014123731526
-MeshRenderer:
+--- !u!114 &114000010850411364
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010858177248}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &33000013405778374
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010858177248}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65000011421443328
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010858177248}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b8e59e39d8eeb4488195db045e08db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RunInEditMode: 0
+  canvasPrefab: {fileID: 223000011826424574, guid: caaa815d251c9044d8d4db0525b440f1,
+    type: 2}
+  commentInputPrefab: {fileID: 114000013811183456, guid: a40257a74fd6ae948b85e18f3cad82a1,
+    type: 2}
+  commentCreateButtonPrefab: {fileID: 114000011332296446, guid: e00cdd339111efb43a7e64119e72aedc,
+    type: 2}
 --- !u!114 &114000012359415598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103,8 +71,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_RunInEditMode: 0
-  inputPrefab: {fileID: 223000011896086510, guid: a40257a74fd6ae948b85e18f3cad82a1,
-    type: 2}
   commentPrefab: {fileID: 1000010826493170, guid: 1e8141ce4e3073047b8091d0e89758b6,
     type: 2}
   camera: {fileID: 0}
