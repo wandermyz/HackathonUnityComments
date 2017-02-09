@@ -37,7 +37,7 @@ public class StereoCameraTouch : MonoBehaviour
         cameraR = GameObject.Find("CameraR").GetComponent<Camera>();
 
         handL = GameObject.Find("HandL");
-        handR = GameObject.Find("HandL");
+        handR = GameObject.Find("HandR");
 
         myTransform = camera.transform;
         myStartPosition = myTransform.localPosition;
@@ -67,7 +67,6 @@ public class StereoCameraTouch : MonoBehaviour
     {
         if (vrControls)
         {
-            Debug.Log("VR");
             var unityEuler = ConvertWebVREulerToUnity(webVREuler);
             unityEuler.x = -unityEuler.x;
             unityEuler.z = -unityEuler.z;
@@ -84,13 +83,17 @@ public class StereoCameraTouch : MonoBehaviour
             pos.z *= -1;
             handL.transform.localPosition = handLStartPosition + pos;
 
+            Debug.Log("left " + unityEuler.x + " " + webVRHandLPosition.x);
+
             unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
             unityEuler.x = -unityEuler.x;
             unityEuler.z = -unityEuler.z;
-            handL.transform.rotation = Quaternion.Euler(unityEuler);
+            handR.transform.rotation = Quaternion.Euler(unityEuler);
             pos = webVRHandRPosition;
             pos.z *= -1;
             handR.transform.localPosition = handRStartPosition + pos;
+
+            Debug.Log("left " + unityEuler.x + " " + webVRHandLPosition.x);
 
             StartCoroutine(WaitEndOfFrame());
 
@@ -111,7 +114,7 @@ public class StereoCameraTouch : MonoBehaviour
 
             rotationVert = Mathf.Clamp(rotationVert, -clampAngle, clampAngle);
 
-            myTransform.rotation = Quaternion.Euler(0.0f, rotationHoriz, rotationVert);
+            myTransform.localRotation = Quaternion.Euler(rotationVert, rotationHoriz, 0.0f);
         }
     }
 

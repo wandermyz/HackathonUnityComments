@@ -5,11 +5,11 @@ public class CameraMovement : MonoBehaviour
 {
     public float speed = 1;
 
-    private Camera cameraMain;
+    private Transform cameraMain;
 
 	void Start ()
 	{
-	    cameraMain = transform.FindChild("WebVRCameraSet/CameraMain").GetComponent<Camera>();
+	    cameraMain = transform.FindChild("WebVRCameraSet/Camera").GetComponent<Transform>();
 	}
 	
 	void Update ()
