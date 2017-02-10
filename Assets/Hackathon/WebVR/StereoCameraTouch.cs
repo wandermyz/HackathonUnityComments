@@ -83,8 +83,6 @@ public class StereoCameraTouch : MonoBehaviour
             pos.z *= -1;
             handL.transform.localPosition = handLStartPosition + pos;
 
-            Debug.Log("left " + unityEuler.x + " " + webVRHandLPosition.x);
-
             unityEuler = ConvertWebVREulerToUnity(webVRHandREuler);
             unityEuler.x = -unityEuler.x;
             unityEuler.z = -unityEuler.z;
@@ -92,8 +90,6 @@ public class StereoCameraTouch : MonoBehaviour
             pos = webVRHandRPosition;
             pos.z *= -1;
             handR.transform.localPosition = handRStartPosition + pos;
-
-            Debug.Log("left " + unityEuler.x + " " + webVRHandLPosition.x);
 
             StartCoroutine(WaitEndOfFrame());
 
