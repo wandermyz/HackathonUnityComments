@@ -9,11 +9,13 @@ public class CreateComments : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+#if UNITY_WEBGL
         // set up the canvas and the button (for commenting in non-VR mode)
         Canvas canvas = Instantiate(canvasPrefab);
         Button commentButton = Instantiate(commentCreateButtonPrefab) as Button;
         commentButton.onClick.AddListener(startCommentCreation);
         commentButton.transform.parent = canvas.transform;
+# endif
     }
 
 

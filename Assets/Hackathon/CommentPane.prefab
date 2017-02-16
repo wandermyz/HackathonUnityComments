@@ -469,6 +469,7 @@ MonoBehaviour:
   agatha: {fileID: 2100000, guid: a934e6b575d11f449a8256e247b18325, type: 2}
   eugene: {fileID: 2100000, guid: 54186a8d546d45648aa51658c656ed51, type: 2}
   kevin: {fileID: 2100000, guid: 9a7362c6cc412274da9c9250eee301fe, type: 2}
+  yang: {fileID: 2100000, guid: 4c763e0ece175004da132e8875ffd0c3, type: 2}
 --- !u!114 &114000013423066912
 MonoBehaviour:
   m_ObjectHideFlags: 1

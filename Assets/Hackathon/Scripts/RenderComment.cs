@@ -11,6 +11,7 @@ public class RenderComment : MonoBehaviour {
     public Material agatha;
     public Material eugene;
     public Material kevin;
+    public Material yang;
 
 	// Use this for initialization
     void Start()
@@ -19,7 +20,8 @@ public class RenderComment : MonoBehaviour {
         {
             {"Agatha", agatha},
             {"Eugene", eugene},
-            {"Kevin", kevin}
+            {"Kevin", kevin},
+            {"Yang", yang }
         };
 
         GameObject author = transform.FindChild("Author").gameObject;

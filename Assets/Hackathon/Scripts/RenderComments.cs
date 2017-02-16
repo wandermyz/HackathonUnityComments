@@ -141,7 +141,7 @@ public class RenderComments : MonoBehaviour
     {
         Vector3 position = camera.transform.position + camera.transform.forward * commentDistance;
         Quaternion rotation = camera.transform.rotation;
-        StartCoroutine(CreateComment(GetRandomString(5), "Yang", message, position, rotation));
+        StartCoroutine(CreateComment(GetRandomString(5), "Eugene", message, position, rotation));
     }
     public static string GetRandomString(int length)
     {
